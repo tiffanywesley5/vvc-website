@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact | Velvet Vision Creative</title>
+  <meta name="description" content="Book a free 30-minute discovery call with Tiffany Snow at Velvet Vision Creative. No pitch, just an honest conversation about what your business needs." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="canonical" href="https://www.velvetvisioncreative.com/contact.html" />
+  <meta property="og:title" content="Contact | Velvet Vision Creative" />
+  <meta property="og:description" content="Book a free 30-minute discovery call with Tiffany Snow at Velvet Vision Creative. No pitch, just an honest conversation about what your business needs." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.velvetvisioncreative.com/contact.html" />
+  <meta property="og:image" content="https://www.velvetvisioncreative.com/images/tiffany-snow.png" />
+  <meta property="og:site_name" content="Velvet Vision Creative" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Contact | Velvet Vision Creative" />
+  <meta name="twitter:description" content="Book a free 30-minute discovery call with Tiffany Snow at Velvet Vision Creative. No pitch, just an honest conversation about what your business needs." />
+  <meta name="twitter:image" content="https://www.velvetvisioncreative.com/images/tiffany-snow.png" />
+</head>
+<body data-page="contact">
+
+  <section class="hero" style="min-height: 50vh;">
+    <div class="container">
+      <div class="hero-content">
+        <p class="hero-eyebrow reveal d1">Get in Touch</p>
+        <h1 class="reveal d2">Let's figure out what you <span class="accent">actually need.</span></h1>
+        <p class="reveal d3">The discovery call is free, 30 minutes, and zero pressure. We will give you an honest assessment even if the answer is that you do not need us yet.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background: var(--white);">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h3 class="reveal">Two ways to connect</h3>
+          <p class="reveal d1">Book a discovery call for a real conversation about your business, or send a message if you have a quick question.</p>
+
+          <div class="contact-detail reveal d2">
+            <strong>Book a Discovery Call</strong><br/>
+            Free, 30 minutes, video or phone.<br/>
+            <a href="https://cal.com/thevisionaryarchitect/vvc-discovery-call" target="_blank" style="color: var(--coral); font-weight: 500;">Schedule on Cal.com &rarr;</a>
+          </div>
+
+          <div class="contact-detail reveal d3">
+            <strong>Email</strong><br/>
+            <a href="mailto:hello@velvetvisioncreative.com">hello@velvetvisioncreative.com</a>
+          </div>
+
+          <div class="contact-detail reveal d4">
+            <strong>Location</strong><br/>
+            St. Louis, Missouri<br/>
+            Serving clients nationally
+          </div>
+
+          <div class="contact-detail reveal d4">
+            <strong>Follow Along</strong><br/>
+            <a href="#">LinkedIn</a> &nbsp;&middot;&nbsp;
+            <a href="#">Substack (TVA)</a> &nbsp;&middot;&nbsp;
+            <a href="#">Instagram</a>
+          </div>
+        </div>
+
+        <div class="contact-form">
+          <h3 class="reveal" style="font-family: var(--font-display); font-size: 24px; font-weight: 700; margin-bottom: 20px;">Send a Message</h3>
+          <form id="contact-form" class="reveal d1">
+            <input type="text" name="name" placeholder="Your name" required />
+            <input type="email" name="email" placeholder="Your email" required />
+            <select name="interest">
+              <option value="" disabled selected>What are you interested in?</option>
+              <option value="ai-agents">AI Agent Systems</option>
+              <option value="brand">Brand Identity & Design</option>
+              <option value="website">Website Design & Development</option>
+              <option value="content">Content Strategy</option>
+              <option value="automation">AI Workflow Automation</option>
+              <option value="consulting">Consulting</option>
+              <option value="other">Something else</option>
+            </select>
+            <textarea name="message" placeholder="Tell me a bit about your project or what you need help with..."></textarea>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+          </form>
+          <p id="form-success" style="display: none; color: var(--purple); font-weight: 500; margin-top: 16px; text-align: center;">Thanks! Tiffany will get back to you within 48 hours.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <p class="section-label reveal">What Happens Next</p>
+      <h2 class="section-title reveal d1">After you reach out</h2>
+      <div class="process-steps">
+        <div class="step reveal">
+          <div class="step-num">1</div>
+          <div>
+            <h3>We respond within 48 hours</h3>
+            <p>Usually faster. You will hear from Tiffany directly, not a sales team or an autoresponder.</p>
+          </div>
+        </div>
+        <div class="step reveal d1">
+          <div class="step-num">2</div>
+          <div>
+            <h3>We schedule a discovery call</h3>
+            <p>30 minutes, free, no pitch. We learn about your business and give you an honest assessment.</p>
+          </div>
+        </div>
+        <div class="step reveal d2">
+          <div class="step-num">3</div>
+          <div>
+            <h3>You get a custom proposal</h3>
+            <p>Within 48 hours of our call. Clear scope, timeline, and pricing. No surprises.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="/shared.js"></script>
+  <script>
+    // Simple form handler (replace with your actual form backend)
+    document.getElementById('contact-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = {};
+      formData.forEach((value, key) => { data[key] = value; });
+
+      try {
+        const response = await fetch(AGENT_API_URL + '/api/inquiry', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (response.ok) {
+          this.style.display = 'none';
+          document.getElementById('form-success').style.display = 'block';
+        } else {
+          alert('Something went wrong. Please email us at hello@velvetvisioncreative.com');
+        }
+      } catch (error) {
+        alert('Could not connect. Please email us at hello@velvetvisioncreative.com');
+      }
+    });
+  </script>
+</body>
+</html>
