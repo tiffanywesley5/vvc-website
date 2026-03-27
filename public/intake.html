@@ -324,12 +324,28 @@
 
   <script src="/shared.js"></script>
   <script>
-    // Submit intake form to Agent 1's API
-    const AGENT_URL = document.querySelector('script[src="/shared.js"]') ? 'https://vvc-agent.onrender.com' : 'https://vvc-agent.onrender.com';
+    // ============================================
+    // FORM SUBMISSION — Formspree (primary) + ntfy.sh (push alert)
+    // Formspree: always available, emails Snow instantly
+    // ntfy.sh: push notification to Snow's phone
+    // Render backend: optional backup (non-blocking)
+    // ============================================
+
+    // ===== REPLACE THIS with your Formspree form ID =====
+    // 1. Go to https://formspree.io and sign up (free)
+    // 2. Create a new form → copy the form ID (e.g. "xabcdefg")
+    // 3. Paste it below
+    const FORMSPREE_ID = 'mdapaewy';
 
     document.getElementById('intake-form').addEventListener('submit', async function(e) {
       e.preventDefault();
 
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Submitting...';
+      submitBtn.disabled = true;
+
+      // Collect all form data
       const formData = new FormData(this);
       const data = {};
       formData.forEach((value, key) => {
@@ -345,23 +361,62 @@
       const services = [];
       document.querySelectorAll('input[name="services"]:checked').forEach(cb => services.push(cb.value));
       data.services = services;
+      data._subject = 'New VVC Project Intake: ' + (data.name || 'Unknown');
 
+      let submitted = false;
+
+      // === PRIMARY: Formspree (always on, sends email) ===
       try {
-        const response = await fetch(AGENT_API_URL + '/api/inquiry', {
+        const response = await fetch('https://formspree.io/f/' + FORMSPREE_ID, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (response.ok) submitted = true;
+      } catch (err) {
+        console.warn('Formspree submission failed:', err);
+      }
+
+      // === BONUS: ntfy.sh push notification (instant alert) ===
+      try {
+        const summary = [
+          '📋 NEW INTAKE FORM',
+          'Name: ' + (data.name || 'N/A'),
+          'Email: ' + (data.email || 'N/A'),
+          'Phone: ' + (data.phone || 'N/A'),
+          'Business: ' + (data.business_name || 'N/A'),
+          'Services: ' + (services.length ? services.join(', ') : 'None selected'),
+          'Budget: ' + (data.budget || 'Not specified'),
+          'Timeline: ' + (data.timeline || 'Not specified'),
+          'Referral: ' + (data.referral_source || 'Not specified'),
+        ].join('\n');
+
+        fetch('https://ntfy.sh/vvc-tiffany-alerts', {
+          method: 'POST',
+          headers: { 'Title': 'New VVC Intake: ' + (data.name || 'Unknown'), 'Priority': '4', 'Tags': 'briefcase,sparkles' },
+          body: summary,
+        }).catch(() => {}); // fire-and-forget
+      } catch (err) {}
+
+      // === BACKUP: Render backend (non-blocking, may be asleep) ===
+      try {
+        fetch(AGENT_API_URL + '/api/inquiry', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
-        });
+        }).catch(() => {}); // fire-and-forget
+      } catch (err) {}
 
-        if (response.ok) {
-          document.getElementById('intake-form-wrapper').querySelector('form').style.display = 'none';
-          document.getElementById('intake-success').style.display = 'block';
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        } else {
-          alert('Something went wrong. Please try again or email us directly at hello@velvetvisioncreative.com');
-        }
-      } catch (error) {
-        alert('Could not connect to our server. Please email us directly at hello@velvetvisioncreative.com');
+      // === SHOW RESULT ===
+      if (submitted) {
+        document.getElementById('intake-form-wrapper').querySelector('form').style.display = 'none';
+        document.getElementById('intake-success').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        // Formspree failed — show error with email fallback
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+        alert('Something went wrong submitting the form. Please try again or email us directly at hello@velvetvisioncreative.com');
       }
     });
   </script>

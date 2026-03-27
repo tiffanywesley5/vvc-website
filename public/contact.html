@@ -121,27 +121,71 @@
 
   <script src="/shared.js"></script>
   <script>
-    // Simple form handler (replace with your actual form backend)
+    // ============================================
+    // CONTACT FORM — Formspree (primary) + ntfy.sh (push alert)
+    // ============================================
+    const FORMSPREE_ID = 'mdapaewy';
+
     document.getElementById('contact-form').addEventListener('submit', async function(e) {
       e.preventDefault();
+
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Sending...';
+      submitBtn.disabled = true;
+
       const formData = new FormData(this);
       const data = {};
       formData.forEach((value, key) => { data[key] = value; });
+      data._subject = 'VVC Contact Form: ' + (data.name || 'Unknown');
 
+      let submitted = false;
+
+      // === PRIMARY: Formspree ===
       try {
-        const response = await fetch(AGENT_API_URL + '/api/inquiry', {
+        const response = await fetch('https://formspree.io/f/' + FORMSPREE_ID, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (response.ok) submitted = true;
+      } catch (err) {
+        console.warn('Formspree failed:', err);
+      }
+
+      // === BONUS: ntfy.sh push notification ===
+      try {
+        const summary = [
+          '💬 NEW CONTACT FORM',
+          'Name: ' + (data.name || 'N/A'),
+          'Email: ' + (data.email || 'N/A'),
+          'Message: ' + (data.message || 'N/A'),
+        ].join('\n');
+
+        fetch('https://ntfy.sh/vvc-tiffany-alerts', {
+          method: 'POST',
+          headers: { 'Title': 'VVC Contact: ' + (data.name || 'Unknown'), 'Priority': '4', 'Tags': 'envelope,sparkles' },
+          body: summary,
+        }).catch(() => {});
+      } catch (err) {}
+
+      // === BACKUP: Render (non-blocking) ===
+      try {
+        fetch(AGENT_API_URL + '/api/inquiry', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
-        });
-        if (response.ok) {
-          this.style.display = 'none';
-          document.getElementById('form-success').style.display = 'block';
-        } else {
-          alert('Something went wrong. Please email us at hello@velvetvisioncreative.com');
-        }
-      } catch (error) {
-        alert('Could not connect. Please email us at hello@velvetvisioncreative.com');
+        }).catch(() => {});
+      } catch (err) {}
+
+      // === SHOW RESULT ===
+      if (submitted) {
+        this.style.display = 'none';
+        document.getElementById('form-success').style.display = 'block';
+      } else {
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+        alert('Something went wrong. Please email us at hello@velvetvisioncreative.com');
       }
     });
   </script>
